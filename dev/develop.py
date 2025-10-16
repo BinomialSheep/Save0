@@ -1,6 +1,3 @@
-# これがゲーム内で実行される
-
-
 def go_to_start():
     while get_pos_x() > 0:
         move(West)
