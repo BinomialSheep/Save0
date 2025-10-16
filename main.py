@@ -177,45 +177,66 @@ def get_max_index(list):
     return max_index
 
 
-def plant_sunflower(num=20):
-    # 花びらの枚数
-    list = []
-    for j in range(10):
-        if get_ground_type() != Grounds.Soil:
-            till()
-        plant(Entities.Sunflower)
-        if get_water() < 0.8:
-            use_item(Items.Water)
-        list.append(measure())
-        move(North)
-    for i in range(num):
-        max_index = get_max_index(list)
-        go_to_xy(get_pos_x(), max_index)
-        while True:
-            if get_entity_type() != Entities.Sunflower:
-                break
-            if can_harvest():
-                break
-            if get_water() < 0.8:
-                use_item(Items.Water)
-            pass
-        if can_harvest():
-            harvest()
+# def plant_sunflower(num=20):
+#     # 花びらの枚数
+#     list = []
+#     for j in range(10):
+#         if get_ground_type() != Grounds.Soil:
+#             till()
+#         plant(Entities.Sunflower)
+#         if get_water() < 0.8:
+#             use_item(Items.Water)
+#         list.append(measure())
+#         move(North)
+#     for i in range(num):
+#         max_index = get_max_index(list)
+#         go_to_xy(get_pos_x(), max_index)
+#         while True:
+#             if get_entity_type() != Entities.Sunflower:
+#                 break
+#             if can_harvest():
+#                 break
+#             if get_water() < 0.8:
+#                 use_item(Items.Water)
+#             pass
+#         if can_harvest():
+#             harvest()
+#             plant(Entities.Sunflower)
+#             list[max_index] = measure()
+#     go_to_start()
+#     for j in range(10):
+#         while True:
+#             if get_entity_type() != Entities.Sunflower:
+#                 break
+#             if can_harvest():
+#                 break
+#             if get_water() < 0.5:
+#                 use_item(Items.Water)
+#             pass
+#         if can_harvest():
+#             harvest()
+#         move(North)
+def plant_sunflower():
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            if get_ground_type() != Grounds.Soil:
+                till()
             plant(Entities.Sunflower)
-            list[max_index] = measure()
-    go_to_start()
-    for j in range(10):
-        while True:
-            if get_entity_type() != Entities.Sunflower:
-                break
-            if can_harvest():
-                break
-            if get_water() < 0.5:
-                use_item(Items.Water)
-            pass
-        if can_harvest():
-            harvest()
-        move(North)
+            move(North)
+        move(East)
+
+    for k in range(9):
+        vul = 15 - k
+        for i in range(get_world_size()):
+            for j in range(get_world_size()):
+                if (
+                    get_entity_type() == Entities.Sunflower
+                    and measure() == vul
+                    and can_harvest()
+                ):
+                    harvest()
+                move(North)
+            move(East)
 
 
 def harvest_all():
@@ -228,27 +249,32 @@ def harvest_all():
         move(East)
 
 
-# go_to_start()
-# harvest_all()
 def main():
+    harvest_all()
     loop_count = 0
-    if can_harvest():
-        harvest()
-    # watering_all()
     clear()
-    # harvest_cactus_all()
     while True:
         clear()
-        plant_pumpkin()
-        # clear()
-        plant_sunflower()
-        # harvest_glass()
-        # if loop_count % 10 == 0:
-        #     plant_pumpkin()
-        # elif loop_count % 4 == 0:
-        #     harvest_carrot_all()
-        # else:
-        #     harvest_tree_all()
+        if loop_count % 10 == 0:
+            plant_sunflower()
+        elif loop_count % 10 == 1:
+            harvest_tree_all()
+        elif loop_count % 10 == 2:
+            plant_pumpkin()
+        elif loop_count % 10 == 3:
+            harvest_carrot_all()
+        elif loop_count % 10 == 4:
+            harvest_cactus_all()
+        elif loop_count % 10 == 5:
+            harvest_tree_all()
+        elif loop_count % 10 == 6:
+            plant_sunflower()
+        elif loop_count % 10 == 7:
+            harvest_glass()
+        elif loop_count % 10 == 8:
+            harvest_glass()
+        elif loop_count % 10 == 9:
+            harvest_glass()
         loop_count += 1
 
 
