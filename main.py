@@ -154,6 +154,13 @@ def plant_pumpkin():
                     if get_water() < 0.5:
                         use_item(Items.Water)
                     ok = False
+                elif can_harvest():
+                    pass
+                else:
+                    # まだ成長途中でどちらのパンプキンになるか分からない
+                    if get_water() < 0.5:
+                        use_item(Items.Water)
+                    ok = False
                 move(North)
             if ok:
                 break
@@ -189,9 +196,9 @@ def plant_sunflower(num=20):
                 break
             if can_harvest():
                 break
-            if get_water() < 0.5:
+            if get_water() < 0.8:
                 use_item(Items.Water)
-            do_a_flip()
+            pass
         if can_harvest():
             harvest()
             plant(Entities.Sunflower)
@@ -205,7 +212,7 @@ def plant_sunflower(num=20):
                 break
             if get_water() < 0.5:
                 use_item(Items.Water)
-            do_a_flip()
+            pass
         if can_harvest():
             harvest()
         move(North)
@@ -229,19 +236,20 @@ def main():
         harvest()
     # watering_all()
     clear()
-    plant_sunflower()
     # harvest_cactus_all()
     while True:
-        # plant_pumpkin()
+        clear()
+        plant_pumpkin()
         # clear()
-        harvest_glass()
+        plant_sunflower()
+        # harvest_glass()
         # if loop_count % 10 == 0:
         #     plant_pumpkin()
         # elif loop_count % 4 == 0:
         #     harvest_carrot_all()
         # else:
         #     harvest_tree_all()
-        # loop_count += 1
+        loop_count += 1
 
 
 if __name__ == "__main__":
