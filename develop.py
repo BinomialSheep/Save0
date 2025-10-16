@@ -1,6 +1,3 @@
-# これがゲーム内で実行される
-
-
 def go_to_start():
     while get_pos_x() > 0:
         move(West)
@@ -158,6 +155,29 @@ def plant_pumpkin():
         move(East)
     if can_harvest():
         harvest()
+
+
+def plant_sunflower(num=20):
+    # 花びらの枚数
+    list = []
+    for j in range(10):
+        if get_ground_type() != Grounds.Soil:
+            till()
+        plant(Entities.Sunflower)
+        list.append(measure())
+        move(North)
+    for i in range(num):
+        max_index = list.index(max(list))
+        go_to_xy(get_pos_x(), max_index)
+        if can_harvest():
+            harvest()
+            plant(Entities.Sunflower)
+            list[max_index] = measure()
+    go_to_start()
+    for j in range(10):
+        if can_harvest():
+            harvest()
+        move(North)
 
 
 def harvest_all():
