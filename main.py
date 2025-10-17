@@ -304,7 +304,7 @@ def harvest_weird_substance_all():
 
 #     change_hat(Hats.Green_Hat)
 #     set_world_size(32)
-def exec_dinorsaur():
+def exec_dinorsaur_naive():
     change_hat(Hats.Dinosaur_Hat)
 
     next_x, next_y = measure()
@@ -326,6 +326,27 @@ def exec_dinorsaur():
         next_x, next_y = measure()
         count += 1
 
+    change_hat(Hats.Green_Hat)
+
+
+def exec_dinorsaur():
+    change_hat(Hats.Dinosaur_Hat)
+
+    ok = True
+    while ok:
+        x, y = get_pos_x(), get_pos_y()
+        if y == 0 and x > 0:
+            ok = move(West)
+        elif x % 2 == 0:
+            if y < get_world_size() - 1:
+                ok = move(North)
+            else:
+                ok = move(East)
+        else:
+            if y > 1 or (y == 1 and x == get_world_size() - 1):
+                ok = move(South)
+            else:
+                ok = move(East)
     change_hat(Hats.Green_Hat)
 
 
@@ -382,63 +403,79 @@ def exec_treature_parallel(drawn_num=32):
     exec_treature()
 
 
+# 並列ヒマワリ＆カボチャ
+def harvest_sunflower_and_pumpkin_parallel():
+
+    drawn_num = 32
+    delay = 400
+    wait_tic = delay * drawn_num
+
+    def func():
+        for i in range(get_world_size()):
+            if get_ground_type() != Grounds.Soil:
+                till()
+            use_item(Items.Water)
+            plant(Entities.Sunflower)
+            move(North)
+        for i in range(wait_tic):
+            pass
+        do_a_flip()
+        do_a_flip()
+        for k in range(9):
+            vul = 15 - k
+            for i in range(get_world_size()):
+                if (
+                    get_entity_type() == Entities.Sunflower
+                    and measure() == vul
+                    and can_harvest()
+                ):
+                    harvest()
+                else:
+                    for i in range(200):
+                        pass
+                move(North)
+
+    for _ in range(drawn_num):
+        if spawn_drone(func):
+            move(East)
+            wait_tic -= delay
+    func()
+
+
 def main():
     # harvest_all()
     loop_count = 0
     clear()
+    change_hat(Hats.Green_Hat)
     # exec_dinorsaur()
-    # exec_treature()
 
-    # use_item(Items.Fertilizer)
-    # harvest()
+    # harvest_sunflower_and_pumpkin_parallel()
+
+    # exec_dinorsaur_naive()
 
     while True:
         clear()
-        exec_treature_parallel()
-        # exec_treature()
-        # harvest_tree_and_carrot_glass_all()
-    #     clear()
-    #     # if loop_count % 10 == 0:
-    #     #     plant_sunflower()
-    #     # elif loop_count % 10 == 1:
-    #     #     harvest_tree_all()
-    #     # elif loop_count % 10 == 2:
-    #     #     plant_pumpkin()
-    #     # elif loop_count % 10 == 3:
-    #     #     harvest_carrot_all()
-    #     # elif loop_count % 10 == 4:
-    #     #     harvest_cactus_all()
-    #     # elif loop_count % 10 == 5:
-    #     #     harvest_tree_all()
-    #     # elif loop_count % 10 == 6:
-    #     #     plant_sunflower()
-    #     # elif loop_count % 10 == 7:
-    #     #     harvest_glass()
-    #     # elif loop_count % 10 == 8:
-    #     #     harvest_glass()
-    #     # elif loop_count % 10 == 9:
-    #     #     harvest_glass()
-    #     if loop_count % 10 == 0:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 1:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 2:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 3:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 4:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 5:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 6:
-    #         plant_sunflower()
-    #     elif loop_count % 10 == 7:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 8:
-    #         harvest_glass()
-    #     elif loop_count % 10 == 9:
-    #         harvest_glass()
-    #     loop_count += 1
+        if loop_count % 10 == 0:
+            harvest_sunflower_and_pumpkin_parallel()
+        elif loop_count % 10 == 1:
+            harvest_tree_and_carrot_glass_all()
+        elif loop_count % 10 == 2:
+            plant_pumpkin()
+        elif loop_count % 10 == 3:
+            harvest_tree_and_carrot_glass_all()
+        elif loop_count % 10 == 4:
+            harvest_cactus_all()
+        elif loop_count % 10 == 5:
+            harvest_tree_and_carrot_glass_all()
+        elif loop_count % 10 == 6:
+            harvest_sunflower_and_pumpkin_parallel()
+        elif loop_count % 10 == 7:
+            harvest_glass()
+        elif loop_count % 10 == 8:
+            harvest_glass()
+        elif loop_count % 10 == 9:
+            harvest_glass()
+        loop_count += 1
 
 
 if __name__ == "__main__":
