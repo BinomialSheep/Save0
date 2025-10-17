@@ -79,6 +79,28 @@ def harvest_carrot_all():
         move(East)
 
 
+def harvest_tree_and_carrot_glass_all():
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            if (i + j) % 2 == 0:
+                if can_harvest():
+                    harvest()
+                plant(Entities.Tree)
+            else:
+                if get_ground_type() != Grounds.Soil:
+                    till()
+                plant(Entities.Carrot)
+            move(North)
+        move(East)
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            while not can_harvest():
+                pass
+            harvest()
+            move(North)
+        move(East)
+
+
 # サボテン
 def harvest_cactus_all():
     size = get_world_size()
@@ -244,6 +266,20 @@ def harvest_all():
                 harvest()
             move(North)
         move(East)
+
+
+def harvest_weird_substance_all():
+    clear()
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            while not can_harvest():
+                pass
+            if i % 2 == 0 and j % 2 == 0:
+                use_item(Items.Weird_Substance)
+            harvest()
+            move(North)
+        move(East)
+    harvest_all()
 
 
 def main():

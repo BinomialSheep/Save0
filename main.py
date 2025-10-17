@@ -65,6 +65,28 @@ def harvest_tree_all():
         move(East)
 
 
+def harvest_tree_and_carrot_glass_all():
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            if (i + j) % 2 == 0:
+                if can_harvest():
+                    harvest()
+                plant(Entities.Tree)
+            else:
+                if get_ground_type() != Grounds.Soil:
+                    till()
+                plant(Entities.Carrot)
+            move(North)
+        move(East)
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            while not can_harvest():
+                pass
+            harvest()
+            move(North)
+        move(East)
+
+
 def harvest_carrot_all():
     for i in range(get_world_size()):
         for j in range(get_world_size()):
@@ -249,33 +271,73 @@ def harvest_all():
         move(East)
 
 
+def harvest_weird_substance_all():
+    clear()
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            while not can_harvest():
+                pass
+            if i % 2 == 0 and j % 2 == 0:
+                use_item(Items.Weird_Substance)
+            harvest()
+            move(North)
+        move(East)
+    harvest_all()
+
+
 def main():
     harvest_all()
     loop_count = 0
     clear()
+    # harvest_weird_substance_all()
+
+    # use_item(Items.Fertilizer)
+    # harvest()
+
     while True:
-        clear()
-        if loop_count % 10 == 0:
-            plant_sunflower()
-        elif loop_count % 10 == 1:
-            harvest_tree_all()
-        elif loop_count % 10 == 2:
-            plant_pumpkin()
-        elif loop_count % 10 == 3:
-            harvest_carrot_all()
-        elif loop_count % 10 == 4:
-            harvest_cactus_all()
-        elif loop_count % 10 == 5:
-            harvest_tree_all()
-        elif loop_count % 10 == 6:
-            plant_sunflower()
-        elif loop_count % 10 == 7:
-            harvest_glass()
-        elif loop_count % 10 == 8:
-            harvest_glass()
-        elif loop_count % 10 == 9:
-            harvest_glass()
-        loop_count += 1
+        harvest_tree_and_carrot_glass_all()
+    #     clear()
+    #     # if loop_count % 10 == 0:
+    #     #     plant_sunflower()
+    #     # elif loop_count % 10 == 1:
+    #     #     harvest_tree_all()
+    #     # elif loop_count % 10 == 2:
+    #     #     plant_pumpkin()
+    #     # elif loop_count % 10 == 3:
+    #     #     harvest_carrot_all()
+    #     # elif loop_count % 10 == 4:
+    #     #     harvest_cactus_all()
+    #     # elif loop_count % 10 == 5:
+    #     #     harvest_tree_all()
+    #     # elif loop_count % 10 == 6:
+    #     #     plant_sunflower()
+    #     # elif loop_count % 10 == 7:
+    #     #     harvest_glass()
+    #     # elif loop_count % 10 == 8:
+    #     #     harvest_glass()
+    #     # elif loop_count % 10 == 9:
+    #     #     harvest_glass()
+    #     if loop_count % 10 == 0:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 1:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 2:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 3:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 4:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 5:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 6:
+    #         plant_sunflower()
+    #     elif loop_count % 10 == 7:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 8:
+    #         harvest_glass()
+    #     elif loop_count % 10 == 9:
+    #         harvest_glass()
+    #     loop_count += 1
 
 
 if __name__ == "__main__":
