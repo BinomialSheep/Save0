@@ -285,17 +285,114 @@ def harvest_weird_substance_all():
     harvest_all()
 
 
+# def exec_dinorsaur():
+#     change_hat(Hats.Dinosaur_Hat)
+#     set_world_size(5)
+#     do_a_flip()
+#     do_a_flip()
+
+#     ok = True
+#     for i in range(5):
+#         for j in range(5):
+#             ok = move(North)
+#             if not ok:
+#                 break
+#         ok = move(East)
+#         if not ok:
+#             break
+
+
+#     change_hat(Hats.Green_Hat)
+#     set_world_size(32)
+def exec_dinorsaur():
+    change_hat(Hats.Dinosaur_Hat)
+
+    next_x, next_y = measure()
+    ok = True
+    count = 0
+    target_count = 10000
+
+    while count < target_count:
+        while ok and get_pos_x() > next_x:
+            ok = move(West)
+        while ok and get_pos_x() < next_x:
+            ok = move(East)
+        while ok and get_pos_y() > next_y:
+            ok = move(South)
+        while ok and get_pos_y() < next_y:
+            ok = move(North)
+        if not ok:
+            break
+        next_x, next_y = measure()
+        count += 1
+
+    change_hat(Hats.Green_Hat)
+
+
+def exec_treature():
+    # clear()
+    # plant(Entities.Bush)
+    # substance = get_world_size() * 2 ** (num_unlocked(Unlocks.Mazes) - 1)
+    # use_item(Items.Weird_Substance, substance)
+    for i in range(4):
+        do_a_flip()
+    visited = set()
+    visited.add((get_pos_x(), get_pos_y()))
+
+    dx = [1, 0, -1, 0]
+    dy = [0, 1, 0, -1]
+    d = [East, North, West, South]
+
+    def dfs(parent_direction):
+        if get_entity_type() == Entities.Treasure:
+            harvest()
+            return True
+        for i in range(4):
+            nx = get_pos_x() + dx[i]
+            ny = get_pos_y() + dy[i]
+            if 0 <= nx < get_world_size() and 0 <= ny < get_world_size():
+                if can_move(d[i]) and (nx, ny) not in visited:
+                    visited.add((nx, ny))
+                    move(d[i])
+                    if dfs(i):
+                        return True
+        if parent_direction != -1:
+            move(d[(parent_direction + 2) % 4])
+        return False
+
+    dfs(-1)
+    clear()
+
+
+def exec_treature_parallel(drawn_num=32):
+    clear()
+
+    for _ in range(drawn_num):
+        move(East)
+        move(North)
+        spawn_drone(exec_treature)
+
+    plant(Entities.Bush)
+    substance = get_world_size() * 2 ** (num_unlocked(Unlocks.Mazes) - 1)
+    use_item(Items.Weird_Substance, substance)
+    exec_treature()
+
+
 def main():
-    harvest_all()
+    # harvest_all()
     loop_count = 0
     clear()
-    # harvest_weird_substance_all()
+    # exec_dinorsaur()
+    # exec_treature()
 
     # use_item(Items.Fertilizer)
     # harvest()
 
     while True:
-        harvest_tree_and_carrot_glass_all()
+        clear()
+        exec_treature_parallel()
+        # exec_treature()
+        # harvest_tree_and_carrot_glass_all()
     #     clear()
     #     # if loop_count % 10 == 0:
     #     #     plant_sunflower()
