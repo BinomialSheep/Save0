@@ -379,7 +379,11 @@ def exec_treature():
         for i in range(4):
             nx = get_pos_x() + dx[i]
             ny = get_pos_y() + dy[i]
-            if 0 <= nx < get_world_size() and 0 <= ny < get_world_size():
+            if nx < 0 or ny < 0 or nx >= get_world_size() or ny >= get_world_size():
+                if can_move(d[i]):
+                    # 外壁がない時はすでにゲームが終了している
+                    return True
+            else:
                 if can_move(d[i]) and (nx, ny) not in visited:
                     visited.add((nx, ny))
                     move(d[i])
@@ -390,10 +394,9 @@ def exec_treature():
         return False
 
     dfs(-1)
-    clear()
+    # clear()
 
 
-# fixme: 迷路が終わると全て終了してしまう（main内のwhileループまで終了してしまう）
 def exec_treature_parallel(drawn_num=32):
     clear()
 
