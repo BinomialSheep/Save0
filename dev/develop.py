@@ -329,17 +329,18 @@ def exec_dinorsaur_naive():
 # def exec_dinosaur():
 #     change_hat(Hats.Dinosaur_Hat)
 
-
 #     ok = True
 #     while ok:
 #         x, y = get_pos_x(), get_pos_y()
-#         if x % 2 == 0:
+#         if y == 0 and x > 0:
+#             ok = move(West)
+#         elif x % 2 == 0:
 #             if y < get_world_size() - 1:
 #                 ok = move(North)
 #             else:
 #                 ok = move(East)
 #         else:
-#             if y > 0:
+#             if y > 1 or (y == 1 and x == get_world_size() - 1):
 #                 ok = move(South)
 #             else:
 #                 ok = move(East)
