@@ -329,21 +329,19 @@ def exec_dinorsaur_naive():
     change_hat(Hats.Green_Hat)
 
 
-def exec_dinorsaur():
+def exec_dinosaur():
     change_hat(Hats.Dinosaur_Hat)
 
     ok = True
     while ok:
         x, y = get_pos_x(), get_pos_y()
-        if y == 0 and x > 0:
-            ok = move(West)
-        elif x % 2 == 0:
+        if x % 2 == 0:
             if y < get_world_size() - 1:
                 ok = move(North)
             else:
                 ok = move(East)
         else:
-            if y > 1 or (y == 1 and x == get_world_size() - 1):
+            if y > 0:
                 ok = move(South)
             else:
                 ok = move(East)
@@ -447,7 +445,6 @@ def main():
     loop_count = 0
     clear()
     change_hat(Hats.Green_Hat)
-    # exec_dinorsaur()
 
     # harvest_sunflower_and_pumpkin_parallel()
 
@@ -455,26 +452,26 @@ def main():
 
     while True:
         clear()
-        if loop_count % 10 == 0:
+        if loop_count % 4 == 0:
             harvest_sunflower_and_pumpkin_parallel()
-        elif loop_count % 10 == 1:
-            harvest_tree_and_carrot_glass_all()
-        elif loop_count % 10 == 2:
-            plant_pumpkin()
-        elif loop_count % 10 == 3:
-            harvest_tree_and_carrot_glass_all()
-        elif loop_count % 10 == 4:
-            harvest_cactus_all()
-        elif loop_count % 10 == 5:
-            harvest_tree_and_carrot_glass_all()
-        elif loop_count % 10 == 6:
-            harvest_sunflower_and_pumpkin_parallel()
-        elif loop_count % 10 == 7:
-            harvest_glass()
-        elif loop_count % 10 == 8:
-            harvest_glass()
-        elif loop_count % 10 == 9:
-            harvest_glass()
+        elif loop_count % 4 == 1:
+            harvest_weird_substance_all()
+        elif loop_count % 4 == 2:
+            exec_dinosaur()
+        elif loop_count % 4 == 3:
+            exec_treature_parallel()
+        # elif loop_count % 10 == 4:
+        #     plant_pumpkin()
+        # elif loop_count % 10 == 5:
+        #     harvest_tree_and_carrot_glass_all()
+        # elif loop_count % 10 == 6:
+        #     harvest_sunflower_and_pumpkin_parallel()
+        # elif loop_count % 10 == 7:
+        #     harvest_glass()
+        # elif loop_count % 10 == 8:
+        #     harvest_glass()
+        # elif loop_count % 10 == 9:
+        #     harvest_glass()
         loop_count += 1
 
 

@@ -326,22 +326,84 @@ def exec_dinorsaur_naive():
     change_hat(Hats.Green_Hat)
 
 
-def exec_dinorsaur():
+# def exec_dinosaur():
+#     change_hat(Hats.Dinosaur_Hat)
+
+
+#     ok = True
+#     while ok:
+#         x, y = get_pos_x(), get_pos_y()
+#         if x % 2 == 0:
+#             if y < get_world_size() - 1:
+#                 ok = move(North)
+#             else:
+#                 ok = move(East)
+#         else:
+#             if y > 0:
+#                 ok = move(South)
+#             else:
+#                 ok = move(East)
+#     change_hat(Hats.Green_Hat)
+
+
+# FIXME：数手先で詰むケースを考慮できていない
+def exec_dinosaur():
     change_hat(Hats.Dinosaur_Hat)
+
+    tail_list = []
+    next_x, next_y = measure()
+
+    def dinorsaur_move(direction):
+        global next_x
+        global next_y
+        ret = move(direction)
+        tail_list.append((get_pos_x(), get_pos_y()))
+        if next_x == get_pos_x() and next_y == get_pos_y():
+            next_x, next_y = measure()
+        else:
+            if tail_list:
+                tail_list.pop(0)
+        return ret
+
+    def valid_move(direction):
+        nx = get_pos_x()
+        ny = get_pos_y()
+        ok = True
+        if direction == West:
+            nx -= 1
+            ok = y == 0
+        elif direction == East:
+            nx += 1
+            ok = y != 0
+        elif direction == North:
+            ny += 1
+            ok = x % 2 == 0 and y < get_world_size() - 1
+        elif direction == South:
+            ny -= 1
+            ok = y == 1 or (x % 2 == 1 and y != 0)
+        # 自分の尻尾にぶつかる位置にはいけない（fixme 実際は先頭にはいける）
+        if (nx, ny) in tail_list:
+            ok = False
+        return ok
 
     ok = True
     while ok:
         x, y = get_pos_x(), get_pos_y()
-        if x % 2 == 0:
-            if y < get_world_size() - 1:
-                ok = move(North)
-            else:
-                ok = move(East)
+        if x > next_x:
+            ds = [West, South, East, North]
+        elif x == next_x:
+            ds = [North, South, East, West]
         else:
-            if y > 0:
-                ok = move(South)
+            if next_y > y:
+                ds = [North, East, South, West]
+            elif next_y == y:
+                ds = [East, North, South, West]
             else:
-                ok = move(East)
+                ds = [South, East, North, West]
+        for d in ds:
+            if valid_move(d):
+                ok = dinorsaur_move(d)
+                break
     change_hat(Hats.Green_Hat)
 
 
